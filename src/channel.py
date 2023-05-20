@@ -13,34 +13,16 @@ class Channel:
 
         self.__channel_id = channel_id
         self.channel = self.get_service().channels().list(id=self.__channel_id, part='snippet,statistics').execute()
+        self.title = self.channel['items'][0]['snippet']['title']
+        self.description = self.channel['items'][0]['snippet']['description']
+        self.url = "https://www.youtube.com/channel/" + self.__channel_id
+        self.video_count = self.channel['items'][0]['statistics']['videoCount']
+        self.subscribers = self.channel['items'][0]['statistics']['subscriberCount']
+        self.views_count = self.channel['items'][0]['statistics']['viewCount']
 
     @property
     def channel_id(self):
         return self.__channel_id
-
-    @property
-    def title(self):
-        return self.channel['items'][0]['snippet']['title']
-
-    @property
-    def description(self):
-        return self.channel['items'][0]['snippet']['description']
-
-    @property
-    def url(self):
-        return "https://www.youtube.com/channel/" + self.__channel_id
-
-    @property
-    def video_count(self):
-        return self.channel['items'][0]['statistics']['videoCount']
-
-    @property
-    def subscribers(self):
-        return self.channel['items'][0]['statistics']['subscriberCount']
-
-    @property
-    def views_count(self):
-        return self.channel['items'][0]['statistics']['viewCount']
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
