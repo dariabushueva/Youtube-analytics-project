@@ -20,6 +20,9 @@ class Channel:
         self.subscribers = self.channel['items'][0]['statistics']['subscriberCount']
         self.views_count = self.channel['items'][0]['statistics']['viewCount']
 
+    def __str__(self):
+        return f"'{self.title} ({self.url})'"
+
     @property
     def channel_id(self):
         return self.__channel_id
@@ -52,5 +55,31 @@ class Channel:
 
         with open(file_name, "w", encoding='utf-8') as file:
             json.dump(data_channel, file, indent=4, ensure_ascii=False)
+
+    def __add__(self, other):
+        return int(self.subscribers) + int(other.subscribers)
+
+    def __sub__(self, other):
+        return int(self.subscribers) - int(other.subscribers)
+
+    def __rsub__(self, other):
+        return int(other.subscribers) - int(self.subscribers)
+
+    def __gt__(self, other):
+        return int(other.subscribers) > int(self.subscribers)
+
+    def __ge__(self, other):
+        return int(other.subscribers) >= int(self.subscribers)
+
+    def __lt__(self, other):
+        return int(other.subscribers) < int(self.subscribers)
+
+    def __le__(self, other):
+        return int(other.subscribers) <= int(self.subscribers)
+
+    def __eq__(self, other):
+        return int(other.subscribers) == int(self.subscribers)
+
+
 
 
