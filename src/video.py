@@ -1,4 +1,3 @@
-import json
 import os
 from googleapiclient.discovery import build
 
@@ -8,18 +7,28 @@ class Video:
     api_key: str = os.getenv('YT_API_KEY')
 
     def __init__(self, video_id):
-        self.video_id = video_id
-        self.video_response = self.get_service().videos().list(part='snippet,statistics,contentDetails,topicDetails', id=self.video_id).execute()
-        self.video_title = self.video_response['items'][0]['snippet']['title']
-        self.video_url = 'https://youtu.be/' + self.video_id
-        self.views_count = self.video_response['items'][0]['statistics']['viewCount']
-        self.like_count = self.video_response['items'][0]['statistics']['commentCount']
+        try:
+            self.video_id = video_id
+            self.video_response = self.get_service().videos().list(
+                part='snippet,statistics,contentDetails,topicDetails',
+                id=self.video_id).execute()
+            self.title = self.video_response['items'][0]['snippet']['title']
+            self.video_url = 'https://youtu.be/' + self.video_id
+            self.views_count = self.video_response['items'][0]['statistics']['viewCount']
+            self.like_count = self.video_response['items'][0]['statistics']['commentCount']
+        except IndexError:
+            print('Несуществующий id видео')
+            self.video_id = video_id
+            self.title = None
+            self.video_url = None
+            self.views_count = None
+            self.like_count = None
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.video_id}')"
 
     def __str__(self):
-        return f"{self.video_title}"
+        return f"{self.title}"
 
     @classmethod
     def get_service(cls):
